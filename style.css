@@ -6,6 +6,7 @@ body {
     background-size: cover; /* to make sure the image covers the full viewport */
     background-repeat: no-repeat; /* to prevent the image from repeating if it's smaller than the viewport */
     background-position: center; /* to center the background image */
+    background-color: black;
 }
 
 .container {

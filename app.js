@@ -86,7 +86,7 @@ textureLoader.load('albumcover.jpeg', (imageTexture) => {
     context.drawImage(imageTexture.image, 0, 0, scaledWidth, scaledHeight);
 
     const imgData = context.getImageData(0, 0, scaledWidth, scaledHeight).data;
-    const resolutionFactor = 7;
+    const resolutionFactor = 2;
 
     const particleTexture = textureLoader.load('particles2.png');
     const particlesGeometry = new THREE.BufferGeometry();
