@@ -5,7 +5,7 @@ import { UnrealBloomPass } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r12
 import { createNoise3D } from './node_modules/simplex-noise/dist/esm/simplex-noise.js';
 
 // Initialize the noise generator
-const noise3DFunction = createNoise3D();
+
 // Set up the scene, camera, and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -148,26 +148,19 @@ function animate() {
             particlePos.lerp(mouse, mouseStrength);
         } else {
             // Otherwise, move the particle back to its original position
-            particlePos.lerp(originalPos, 0.05);
+            particlePos.lerp(originalPos, 0.025);
         }
-
-        // Use the noise function to get a smooth, varying value for each particle
-        const noiseValue = noise3DFunction(particlePos.x, particlePos.y, time);
-
-        // Use the noise value to adjust the position of the particle
-        particlePos.z += noiseValue * 0.01;  // adjust the multiplier to control the amplitude of the animation
 
         positions[i] = particlePos.x;
         positions[i + 1] = particlePos.y;
         positions[i + 2] = particlePos.z;
     }
+        particlesGeometry.attributes.position.needsUpdate = true;
 
-    particlesGeometry.attributes.position.needsUpdate = true;
-
-    //renderer.render(scene, camera);
-    composer.render();
-    requestAnimationFrame(animate);
-}
+        //renderer.render(scene, camera);
+        composer.render();
+        requestAnimationFrame(animate);
+    }
 
     animate();
 });
