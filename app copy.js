@@ -2,9 +2,10 @@ import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/thr
 import { EffectComposer } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/UnrealBloomPass.js";
-
+import { createNoise3D } from './node_modules/simplex-noise/dist/esm/simplex-noise.js';
 
 // Initialize the noise generator
+const noise3DFunction = createNoise3D();
 
 // Set up the scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -140,16 +141,12 @@ function animate() {
         let particlePos = new THREE.Vector3(positions[i], positions[i + 1], positions[i + 2]);
         let originalPos = new THREE.Vector3(originalPositions[i], originalPositions[i + 1], originalPositions[i + 2]);
 
-        // Calculate the distance between the particle and the mouse
-        let distanceToMouse = particlePos.distanceTo(mouse);
+        // Use the noise function to get a smooth, varying value for each particle
+        const noiseValue = noise3DFunction(particlePos.x, particlePos.y, time);
 
-        // If the distance is less than the mouseRadius, move the particle towards the mouse
-        if (distanceToMouse < mouseRadius) {
-            particlePos.lerp(mouse, mouseStrength);
-        } else {
-            // Otherwise, move the particle back to its original position
-            particlePos.lerp(originalPos, 0.025);
-        }
+
+        // Use the noise value to adjust the position of the particle
+        particlePos.z += noiseValue * 0.01;  // adjust the multiplier to control the amplitude of the animation
 
         positions[i] = particlePos.x;
         positions[i + 1] = particlePos.y;
