@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url("background2.jpg");  /* use the url() function */
+    background-size: cover; /* to make sure the image covers the full viewport */
+    background-repeat: no-repeat; /* to prevent the image from repeating if it's smaller than the viewport */
+    background-position: center; /* to center the background image */
+    background-color: black;
+}
+
+.container {
+    text-align: center;
+    padding: 50px;
+}
+
+.album-cover {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    color: #666;
+}

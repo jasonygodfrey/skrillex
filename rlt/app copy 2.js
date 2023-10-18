@@ -5,7 +5,7 @@ import { UnrealBloomPass } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r12
 import { createNoise3D } from './node_modules/simplex-noise/dist/esm/simplex-noise.js';
 
 // Initialize the noise generator
-const noise3DFunction = createNoise3D();
+
 // Set up the scene, camera, and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -87,14 +87,14 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
     context.drawImage(imageTexture.image, 0, 0, imgWidth, imgHeight);
 
     const imgData = context.getImageData(0, 0, imgWidth, imgHeight).data;
-    const resolutionFactor = 4;
+    const resolutionFactor = 1;
 
     const particleTexture = textureLoader.load('particles2.png');
     const particlesGeometry = new THREE.BufferGeometry();
     const particleVertices = [];
     const particleColors = [];
     const originalPositions = [];
-    const increasedBrightness = 2.25; // Place this before the loop
+    const increasedBrightness = 1.25; // Place this before the loop
 
     for (let y = 0; y < imgHeight; y += resolutionFactor) {
         for (let x = 0; x < imgWidth; x += resolutionFactor) {
@@ -110,8 +110,6 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
                 particleVertices.push(xPos, yPos, 0);
                 originalPositions.push(xPos, yPos, 0);
 particleColors.push((r / 255) * increasedBrightness * 0.8, (g / 255) * increasedBrightness, (b / 255) * increasedBrightness);            }
-//particleColors.push(1, 0, 0); // Set RGB values to (1, 0, 0) for red
-
         }
     }
 
@@ -131,16 +129,7 @@ particleColors.push((r / 255) * increasedBrightness * 0.8, (g / 255) * increased
     scene.add(particles);
 
 
-    const radius = 1; // Replace with the desired radius of the circle
-const segments = 32; // Replace with the desired number of segments to approximate the circle
-    
-    const circleTexture = textureLoader.load('circle4.png');
-    const circleMaterial = new THREE.MeshBasicMaterial({ map: circleTexture });
-    const circleGeometry = new THREE.CircleGeometry(radius, segments);
-    const circleMesh = new THREE.Mesh(circleGeometry, circleMaterial);
-    circleMesh.position.set(0, 0, -2);
-        circleMesh.rotation.set(0, 0, 0);
-//scene.add(circleMesh);
+
 
 // Then, in your animate function:
 function animate() {
@@ -159,26 +148,19 @@ function animate() {
             particlePos.lerp(mouse, mouseStrength);
         } else {
             // Otherwise, move the particle back to its original position
-            particlePos.lerp(originalPos, 0.05);
+            particlePos.lerp(originalPos, 0.025);
         }
-
-        // Use the noise function to get a smooth, varying value for each particle
-        const noiseValue = noise3DFunction(particlePos.x, particlePos.y, time);
-
-        // Use the noise value to adjust the position of the particle
-        particlePos.z += noiseValue * 0.01;  // adjust the multiplier to control the amplitude of the animation
 
         positions[i] = particlePos.x;
         positions[i + 1] = particlePos.y;
         positions[i + 2] = particlePos.z;
     }
+        particlesGeometry.attributes.position.needsUpdate = true;
 
-    particlesGeometry.attributes.position.needsUpdate = true;
-
-    //renderer.render(scene, camera);
-    composer.render();
-    requestAnimationFrame(animate);
-}
+        //renderer.render(scene, camera);
+        composer.render();
+        requestAnimationFrame(animate);
+    }
 
     animate();
 });

@@ -2,7 +2,7 @@ import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/thr
 import { EffectComposer } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/UnrealBloomPass.js";
-import { createNoise3D } from './node_modules/simplex-noise/dist/esm/simplex-noise.js';
+import { createNoise3D } from '../node_modules/simplex-noise/dist/esm/simplex-noise.js';
 
 // Initialize the noise generator
 const noise3DFunction = createNoise3D();
