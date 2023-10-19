@@ -8,6 +8,8 @@ import { createNoise3D } from '../node_modules/simplex-noise/dist/esm/simplex-no
 const noise3DFunction = createNoise3D();
 // Set up the scene, camera, and renderer
 const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0.2);
+
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ alpha: true });  // enable alpha channel
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -56,7 +58,7 @@ window.addEventListener('touchstart', handleTouch);
 window.addEventListener('touchmove', handleTouch);
 function handleTouch(e) {
     e.preventDefault();  // Prevents the default behavior of touch events (like scrolling)
-    
+
     // Check if there's at least one touch
     if (e.touches.length > 0) {
         const touch = e.touches[0];
@@ -78,23 +80,23 @@ const scale = 1; // Adjust this value for your desired scale. E.g., 0.5 means th
 textureLoader.load('skrillex2023logo.png', (imageTexture) => {
     const imgWidth = imageTexture.image.width * scale;
     const imgHeight = imageTexture.image.height * scale;
-    
+
     const canvas = document.createElement('canvas');
     canvas.width = imgWidth;
     canvas.height = imgHeight;
     const context = canvas.getContext('2d');
-    
+
     context.drawImage(imageTexture.image, 0, 0, imgWidth, imgHeight);
 
     const imgData = context.getImageData(0, 0, imgWidth, imgHeight).data;
-    const resolutionFactor = 4;
+    const resolutionFactor = 2;
 
     const particleTexture = textureLoader.load('particles2.png');
     const particlesGeometry = new THREE.BufferGeometry();
     const particleVertices = [];
     const particleColors = [];
     const originalPositions = [];
-    const increasedBrightness = 2.25; // Place this before the loop
+    const increasedBrightness = 0.25; // Place this before the loop
 
     for (let y = 0; y < imgHeight; y += resolutionFactor) {
         for (let x = 0; x < imgWidth; x += resolutionFactor) {
@@ -109,76 +111,136 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
                 const yPos = (y / imgHeight - 0.5) * -2;
                 particleVertices.push(xPos, yPos, 0);
                 originalPositions.push(xPos, yPos, 0);
-particleColors.push((r / 255) * increasedBrightness * 0.8, (g / 255) * increasedBrightness, (b / 255) * increasedBrightness);            }
-//particleColors.push(1, 0, 0); // Set RGB values to (1, 0, 0) for red
-
+                particleColors.push((r / 255) * increasedBrightness * 0.8, (g / 255) * increasedBrightness, (b / 255) * increasedBrightness);
+            }
+            particleColors.push(1, 0, 0); // Set RGB values to (1, 0, 0) for red
+            particleColors.push(0xfc / 255, 0x45 / 255, 0x26 / 255); // Set RGB values to #fc4526
         }
     }
 
     particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(particleVertices, 3));
     particlesGeometry.setAttribute('color', new THREE.Float32BufferAttribute(particleColors, 3));
 
-    const particlesMaterial = new THREE.PointsMaterial({ 
-        size: 0.05, 
-        map: particleTexture, 
-        vertexColors: true, 
+    const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.05,
+        map: particleTexture,
+        vertexColors: true,
         transparent: true,
         opacity: 1, // Adjust this value
-        
+
 
     });
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+
     scene.add(particles);
 
 
-    const radius = 1; // Replace with the desired radius of the circle
-const segments = 32; // Replace with the desired number of segments to approximate the circle
-    
-    const circleTexture = textureLoader.load('circle4.png');
+    const radius = 5; // Replace with the desired radius of the circle
+    const segments = 32; // Replace with the desired number of segments to approximate the circle
+
+    const circleTexture = textureLoader.load('backgroundalbum.png');
     const circleMaterial = new THREE.MeshBasicMaterial({ map: circleTexture });
     const circleGeometry = new THREE.CircleGeometry(radius, segments);
     const circleMesh = new THREE.Mesh(circleGeometry, circleMaterial);
     circleMesh.position.set(0, 0, -2);
-        circleMesh.rotation.set(0, 0, 0);
-//scene.add(circleMesh);
+    circleMesh.rotation.set(0, 0, 0);
+    //scene.add(circleMesh);
 
-// Then, in your animate function:
-function animate() {
-    const positions = particlesGeometry.attributes.position.array;
-    const time = Date.now() * 0.0001;  // adjust the multiplier to control the speed of the animation
+    textureLoader.load('backgroundalbum.png', (imageTexture) => {
+        const scale = 4;
+        const imgWidth = imageTexture.image.width * scale;
+        const imgHeight = imageTexture.image.height * scale;
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = imgWidth;
+        canvas.height = imgHeight;
+        const context = canvas.getContext('2d');
+        
+        context.drawImage(imageTexture.image, 0, 0, imgWidth, imgHeight);
+    
+        const imgData = context.getImageData(0, 0, imgWidth, imgHeight).data;
+        const resolutionFactor = 1; // Increase this value for a more pixelated effect
+    
+        const particleTexture = textureLoader.load('particleswhite.png');        const particlesGeometry = new THREE.BufferGeometry();
+        const particleVertices = [];
+        const particleColors = [];
+        const originalPositions = [];
+        const increasedBrightness = 0.4; // Place this before the loop
+    
+        for (let y = 0; y < imgHeight; y += resolutionFactor) {
+            for (let x = 0; x < imgWidth; x += resolutionFactor) {
+                const index = (y * imgWidth + x) * 4;
+                const r = imgData[index];
+                const g = imgData[index + 1];
+                const b = imgData[index + 2];
+        
+                const brightness = 0.7152 * r + 0.2126 * g + 0.0722 * b;
+                if (brightness > 128) {
+                    const xPos = ((x / imgWidth - 0.5) * 2) * scale;  // multiply by scale
+                    const yPos = ((y / imgHeight - 0.5) * -2) * scale;  // multiply by scale
+                    const zPos = -1; // Adjust this value to set the particles further back
+                    particleVertices.push(xPos, yPos, zPos);
+                    originalPositions.push(xPos, yPos, zPos);
+                    particleColors.push(1, 1, 1); // Set RGB values to white
+                }
+            }
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(particleVertices, 3));
+        particlesGeometry.setAttribute('color', new THREE.Float32BufferAttribute(particleColors, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({ 
+            size: 0.02, // Increase this value for a more pixelated effect
+            map: particleTexture, 
+            vertexColors: true, 
+            transparent: true,
+            opacity: 0.1, // Adjust this value
+            color: new THREE.Color(1, 1, 1) // White
 
-    for (let i = 0; i < positions.length; i += 3) {
-        let particlePos = new THREE.Vector3(positions[i], positions[i + 1], positions[i + 2]);
-        let originalPos = new THREE.Vector3(originalPositions[i], originalPositions[i + 1], originalPositions[i + 2]);
+        });
+        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+        
+        scene.add(particles);
+    });
+    
 
-        // Calculate the distance between the particle and the mouse
-        let distanceToMouse = particlePos.distanceTo(mouse);
+    // Then, in your animate function:
+    function animate() {
+        const positions = particlesGeometry.attributes.position.array;
+        const time = Date.now() * 0.0001;  // adjust the multiplier to control the speed of the animation
 
-        // If the distance is less than the mouseRadius, move the particle towards the mouse
-        if (distanceToMouse < mouseRadius) {
-            particlePos.lerp(mouse, mouseStrength);
-        } else {
-            // Otherwise, move the particle back to its original position
-            particlePos.lerp(originalPos, 0.05);
+        for (let i = 0; i < positions.length; i += 3) {
+            let particlePos = new THREE.Vector3(positions[i], positions[i + 1], positions[i + 2]);
+            let originalPos = new THREE.Vector3(originalPositions[i], originalPositions[i + 1], originalPositions[i + 2]);
+
+            // Calculate the distance between the particle and the mouse
+            let distanceToMouse = particlePos.distanceTo(mouse);
+
+            // If the distance is less than the mouseRadius, move the particle towards the mouse
+            if (distanceToMouse < mouseRadius) {
+                particlePos.lerp(mouse, mouseStrength);
+            } else {
+                // Otherwise, move the particle back to its original position
+                particlePos.lerp(originalPos, 0.05);
+            }
+
+            // Use the noise function to get a smooth, varying value for each particle
+            const noiseValue = noise3DFunction(particlePos.x, particlePos.y, time);
+
+            // Use the noise value to adjust the position of the particle
+            particlePos.z += noiseValue * 0.01;  // adjust the multiplier to control the amplitude of the animation
+
+            positions[i] = particlePos.x;
+            positions[i + 1] = particlePos.y;
+            positions[i + 2] = particlePos.z;
         }
 
-        // Use the noise function to get a smooth, varying value for each particle
-        const noiseValue = noise3DFunction(particlePos.x, particlePos.y, time);
+        particlesGeometry.attributes.position.needsUpdate = true;
 
-        // Use the noise value to adjust the position of the particle
-        particlePos.z += noiseValue * 0.01;  // adjust the multiplier to control the amplitude of the animation
-
-        positions[i] = particlePos.x;
-        positions[i + 1] = particlePos.y;
-        positions[i + 2] = particlePos.z;
+        //renderer.render(scene, camera);
+        composer.render();
+        requestAnimationFrame(animate);
     }
-
-    particlesGeometry.attributes.position.needsUpdate = true;
-
-    //renderer.render(scene, camera);
-    composer.render();
-    requestAnimationFrame(animate);
-}
 
     animate();
 });
