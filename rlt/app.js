@@ -96,7 +96,7 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
     const particleVertices = [];
     const particleColors = [];
     const originalPositions = [];
-    const increasedBrightness = 0.25; // Place this before the loop
+    const increasedBrightness = 0.65; // Place this before the loop
 
     for (let y = 0; y < imgHeight; y += resolutionFactor) {
         for (let x = 0; x < imgWidth; x += resolutionFactor) {
@@ -126,7 +126,7 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
         map: particleTexture,
         vertexColors: true,
         transparent: true,
-        opacity: 1, // Adjust this value
+        opacity: 2.8, // Adjust this value
 
 
     });
@@ -146,7 +146,7 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
     circleMesh.rotation.set(0, 0, 0);
     //scene.add(circleMesh);
 
-    textureLoader.load('backgroundalbum.png', (imageTexture) => {
+    textureLoader.load('circle20.png', (imageTexture) => {
         const scale = 4;
         const imgWidth = imageTexture.image.width * scale;
         const imgHeight = imageTexture.image.height * scale;
@@ -194,7 +194,7 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
             map: particleTexture, 
             vertexColors: true, 
             transparent: true,
-            opacity: 0.1, // Adjust this value
+            opacity: 0.01, // Adjust this value
             color: new THREE.Color(1, 1, 1) // White
 
         });
@@ -203,9 +203,122 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
         scene.add(particles);
     });
     
+// 1. Load the fire texture
+const fireTexture = new THREE.TextureLoader().load('circle4.png');
+
+// 2. Create the particle system material
+const fireMaterial = new THREE.PointsMaterial({
+    map: fireTexture,
+    blending: THREE.AdditiveBlending,
+    size: 0.1,  // Increase the size for overlap
+    transparent: true,
+    opacity: 0.05,
+    vertexColors: true,
+    depthWrite: false  // To ensure particles blend properly without depth interference
+});
+
+// 3. Create the particle system geometry
+const fireGeometry = new THREE.BufferGeometry();
+const fireVertices = [];
+const fireColors = [];
+const fireSizes = [];
+
+for (let i = 0; i < 5000; i++) {  // Increase the number of particles for density
+    const x = (Math.random() - 0.5) * 2;
+    const y = Math.random() - 2;
+    const z = (Math.random() - 0.5) * 2;
+    fireVertices.push(x, y, z);
+
+    const hue = 10 + Math.random() * 10;
+    const saturation = 80 + Math.random() * 20;
+    const lightness = 40 + Math.random() * 2;
+    const color = new THREE.Color(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+    fireColors.push(color.r, color.g, color.b);
+}
+fireGeometry.setAttribute('position', new THREE.Float32BufferAttribute(fireVertices, 3));
+fireGeometry.setAttribute('color', new THREE.Float32BufferAttribute(fireColors, 3));
+fireGeometry.setAttribute('size', new THREE.Float32BufferAttribute(fireSizes, 1)); // NEW: Set varying sizes
+
+const fireParticles = new THREE.Points(fireGeometry, fireMaterial);
+scene.add(fireParticles);
+
+// 4. Animate the fire particles in your animate function
+function animateFire() {
+    const positions = fireGeometry.attributes.position.array;
+    for (let i = 0; i < positions.length; i += 3) {
+        positions[i + 1] += 0.005 + Math.random() * 0.01; // Add randomness to upward movement
+        if (positions[i + 1] > 0.5) {
+            positions[i + 1] = -0.5;
+        }
+        positions[i] += (Math.random() - 0.5) * 0.01; // Add slight randomness to x position for flicker
+    }
+    fireGeometry.attributes.position.needsUpdate = true;
+}
+// 1. Load the fire2 texture
+const fire2Texture = new THREE.TextureLoader().load('particlesred.png'); // Change the path to the new texture
+
+// 2. Create the particle system material for fire2
+const fire2Material = new THREE.PointsMaterial({
+    map: fire2Texture,
+    blending: THREE.AdditiveBlending,
+    size: 0.08,  // Slightly different size for variation
+    transparent: true,
+    opacity: 0.006,  // Slightly less opacity for variation
+    vertexColors: true,
+    depthWrite: false
+});
+
+// 3. Create the particle system geometry for fire2
+const fire2Geometry = new THREE.BufferGeometry();
+const fire2Vertices = [];
+const fire2Colors = [];
+const fire2Sizes = [];
+
+for (let i = 0; i < 4000; i++) {  // Slightly fewer particles for variation
+    const x = (Math.random() - 0.5) * 2.5;  // Wider spread
+    const y = Math.random() - 1.5;
+    const z = (Math.random() - 0.5) * 2.5;  // Wider spread
+    fire2Vertices.push(x, y, z);
+
+    const hue = 5 + Math.random() * 15;  // Different color variation
+    const saturation = 85 + Math.random() * 15;
+    const lightness = 35 + Math.random() * 3;
+    const color = new THREE.Color(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+    fire2Colors.push(color.r, color.g, color.b);
+}
+fire2Geometry.setAttribute('position', new THREE.Float32BufferAttribute(fire2Vertices, 3));
+fire2Geometry.setAttribute('color', new THREE.Float32BufferAttribute(fire2Colors, 3));
+fire2Geometry.setAttribute('size', new THREE.Float32BufferAttribute(fire2Sizes, 1)); 
+
+const fire2Particles = new THREE.Points(fire2Geometry, fire2Material);
+scene.add(fire2Particles);
+
+// 4. Animate the fire2 particles in your animate function
+function animateFire2() {
+    const positions = fire2Geometry.attributes.position.array;
+    for (let i = 0; i < positions.length; i += 3) {
+        positions[i + 1] += 0.004 + Math.random() * 0.009; // Different movement speed
+        if (positions[i + 1] > 0.6) {
+            positions[i + 1] = -0.6;
+        }
+        positions[i] += (Math.random() - 0.5) * 0.012; // Different flicker
+    }
+    fire2Geometry.attributes.position.needsUpdate = true;
+}
+// Create a red square plane geometry
+const squareSize = 4.5; // Adjust the size as needed
+const squareGeometry = new THREE.PlaneGeometry(squareSize, squareSize);
+const squareMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Red color
+
+const squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
+squareMesh.rotation.x = -Math.PI / 2; // Rotate the square 90 degrees to lay it flat
+squareMesh.position.set(0, -2.7, 0); // Adjust the y-value to set the height of the ground
+scene.add(squareMesh);
 
     // Then, in your animate function:
     function animate() {
+        animateFire();
+        animateFire2();
         const positions = particlesGeometry.attributes.position.array;
         const time = Date.now() * 0.0001;  // adjust the multiplier to control the speed of the animation
 
@@ -240,6 +353,7 @@ textureLoader.load('skrillex2023logo.png', (imageTexture) => {
         //renderer.render(scene, camera);
         composer.render();
         requestAnimationFrame(animate);
+        
     }
 
     animate();
