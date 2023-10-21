@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import Head from 'next/head';
 import styles from './Home.module.css';
-import { initializeThreeJS } from '../utils/app';  // Adjust path if necessary
+import { initializeThreeJS } from '../utils/app.js';  // Adjust path if necessary
 
 
 export default function Home() {
