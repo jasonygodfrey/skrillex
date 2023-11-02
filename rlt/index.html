@@ -37,7 +37,7 @@ body {
     justify-content: center;
     align-items: center;
     height: calc(140px - 16px); 
-    padding: 8px; 
+    padding: 8px 0;  /*Remove padding on the x-axis */
     background-color: transparent;
     text-decoration: none;
     font-size: 8vw; /* Adjust the size depending on your needs */
@@ -48,7 +48,7 @@ body {
     font-weight: 900;
     letter-spacing: -0.1255813953488372vw;
     transition: background-color 0.25s ease;
-    padding: 8px 1000px; /* Set the padding to the same value as the hover state */
+    /* padding: 8px 1000px; /* Set the padding to the same value as the hover state */
 
 
 }
@@ -61,8 +61,8 @@ body {
 
 
 .link:hover {
-    padding: 8px 1000px; /* Adjust the second value to make the hover state wider */
-
+    width: 100%; /* Set the width to 100% */
+    padding: 8px 0; /* Remove padding on the x-axis */
     text-decoration: none;
     text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.0);  /* Adding text shadow */
 
