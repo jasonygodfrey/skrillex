@@ -362,8 +362,8 @@ scene.add(squareMesh);
 camera.position.z = 1.38;
 
 window.addEventListener('resize', () => {
-    const newWidth = window.innerWidth;
-    const newHeight = window.innerHeight;
+    const newWidth = document.documentElement.clientWidth;
+    const newHeight = document.documentElement.clientHeight;
 
     camera.aspect = newWidth / newHeight;
     camera.updateProjectionMatrix();
