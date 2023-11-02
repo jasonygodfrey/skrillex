@@ -40,7 +40,7 @@ body {
     padding: 8px; 
     background-color: transparent;
     text-decoration: none;
-    font-size: 120px;
+    font-size: 8vw; /* Adjust the size depending on your needs */
     transition: text-decoration 0.3s, border 0.3s; 
     border: 0px solid white; 
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);  /* Adding text shadow */
@@ -102,7 +102,8 @@ body {
     transform: translate(-50%, -50%);
     font-family: "Nimbus Sans", sans-serif;
     font-weight: 900;
-    font-size: 72px; /* Adjust size as needed */
+    font-size: 6vw; /* Adjust the size depending on your needs */
+
     color: #fc4526;
     letter-spacing: -0.1255813953488372vw;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -124,6 +125,35 @@ body {
     width: 100%;
     height: auto;
     z-index: 2; /* Ensures the image is above the app */
+}
+
+/* You may also need to adjust padding and other properties responsively */
+@media (max-width: 600px) {
+    .container {
+        padding: 35px 25px; /* Smaller padding for small screens */
+    }
+
+    .link {
+        font-size: 10vw; /* Larger size since vw will be small on mobile */
+        padding: 8px 20px; /* Less padding on the sides */
+    }
+
+    .title {
+        font-size: 12vw; /* Larger size for small screens */
+        top: 5%; /* Adjust position for smaller screens */
+    }
+}
+
+/* Additional breakpoints for other screen sizes can be added as needed */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .link {
+        font-size: 7vw; /* Adjust font size for tablet screens */
+        padding: 8px 40px; /* Adjust padding for tablet screens */
+    }
+
+    .title {
+        font-size: 9vw; /* Adjust title size for tablet screens */
+    }
 }
 
     </style>
