@@ -46,7 +46,7 @@ const textureLoader = new THREE.TextureLoader();
     window.addEventListener('mousemove', (e) => {
         mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-        mouse.z = 0.5;
+        mouse.z = getAverageParticleZ();
     
         raycaster.setFromCamera(mouse, camera);
     
@@ -62,8 +62,25 @@ const textureLoader = new THREE.TextureLoader();
         camera.position.y += (-intersectPoint.y * cameraParallaxFactor - camera.position.y) * 0.05;
         camera.lookAt(scene.position);
     });
-    
+    // Define particlesGeometry in the outer scope
+let particlesGeometry;
 
+textureLoader.load('skrillex2023logo.png', (imageTexture) => {
+    // ...
+  //  particlesGeometry = new THREE.BufferGeometry();
+    // ...
+});
+    function getAverageParticleZ() {
+        if (!particlesGeometry) {
+            return 0;
+        }
+        const positions = particlesGeometry.attributes.position.array;
+        let totalZ = 0;
+        for (let i = 2; i < positions.length; i += 3) {
+            totalZ += positions[i];
+        }
+        return totalZ / (positions.length / 3);
+    }
     window.addEventListener('touchstart', handleTouch);
     window.addEventListener('touchmove', handleTouch);
     
@@ -75,7 +92,7 @@ const textureLoader = new THREE.TextureLoader();
 
             mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
-            mouse.z = 0.5;
+            mouse.z = getAverageParticleZ();
 
             raycaster.setFromCamera(mouse, camera);
             
@@ -85,6 +102,8 @@ const textureLoader = new THREE.TextureLoader();
             camera.position.y += (-intersectPoint.y * cameraParallaxFactor - camera.position.y) * 0.05;
             camera.lookAt(scene.position);
         }
+        // Add a new function to calculate the average z-coordinate of all particles
+
     }
 const scale = 1; // Adjust this value for your desired scale. E.g., 0.5 means the image will be 50% smaller
 
@@ -169,7 +188,7 @@ function animate() {
 
         // If the distance is less than the mouseRadius, move the particle towards the mouse
         if (distanceToMouse < mouseRadius) {
-            particlePos.lerp(mouse, mouseStrength);
+            particlePos.lerp(new THREE.Vector3(mouse.x, mouse.y, particlePos.z), mouseStrength);
         } else {
             // Otherwise, move the particle back to its original position
             particlePos.lerp(originalPos, 0.05);
