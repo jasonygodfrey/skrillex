@@ -101,28 +101,3 @@
 }
 
 
-@media screen and (max-width: 768px) {
-    .title {
-        font-size: 30px; /* Further reduced font size */
-    }
-    .link {
-        font-size: 35px; /* Reduced font size */
-        padding: 4px 25px; /* Reduced padding */
-        height: auto; /* Adjust height */
-    }
-    .container {
-        padding: 30px 25px; /* Adjust container padding */
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .title {
-        font-size: 24px; /* Even smaller font size for very small screens */
-    }
-    .link {
-        font-size: 25px; /* Smaller font size */
-        padding: 2px 15px; /* Smaller padding */
-    }
-    /* Additional responsive adjustments for very small screens */
-}
-
