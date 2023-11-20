@@ -28,7 +28,7 @@ export default function Rlt() {
         <link href="https://fonts.googleapis.com/css2?family=Nimbus+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </Head>
       <div className="container">
-        <div className="title">RED LETTER TITLE</div>
+      <div className="title">RED LETTER TITLE</div>
         <div className="links-container">
           <a className="link" href="https://skrillex.lnk.to/QuestForFireAW">MUSIC</a>
           <a className="link" href="https://skrillex.lnk.to/VideosFC">VIDEOS</a> 
@@ -38,7 +38,7 @@ export default function Rlt() {
       <div id="app2" ref={mount}>
         {/* Your app content goes here */}
       </div>
-      <img id="footer-image" src="footerplaceholderorange.png" alt="Footer Image" />
+      <img id="footer-image" src="footerplaceholderorange.png" alt="Footer Image" /> 
     </div>
   );
 }

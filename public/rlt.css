@@ -25,7 +25,7 @@
     font-weight: 900;
     letter-spacing: -0.1255813953488372vw;
     transition: background-color 0.25s ease;
-    padding: 8px 1000px; /* Set the padding to the same value as the hover state */
+    padding: 8px 10px; /* Set the padding to the same value as the hover state */
 
 
 }
@@ -38,7 +38,7 @@
 
 
 .link:hover {
-    padding: 8px 1000px; /* Adjust the second value to make the hover state wider */
+    padding: 8px 10px; /* Adjust the second value to make the hover state wider */
 
     text-decoration: none;
     text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.0);  /* Adding text shadow */
@@ -101,4 +101,15 @@
     width: 100%;
     height: auto;
     z-index: 2; /* Ensures the image is above the app */
+}
+
+
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 36px; /* Smaller font size for smaller screens */
+    }
+    .link {
+        font-size: 40px; /* Smaller font size for links */
+        padding: 8px 50px; /* Smaller padding */
+    }
 }
