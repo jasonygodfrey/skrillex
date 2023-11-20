@@ -1,6 +1,9 @@
 
 .container {
-    padding: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
     padding: 70px 50px; /* Adjust the first value to move the links higher or lower */
     z-index: 1;
