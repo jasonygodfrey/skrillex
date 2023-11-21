@@ -8,8 +8,8 @@ export function initializeThreeJS(mountPoint) {
     // Initialize the noise generator
     const noise3DFunction = createNoise3D();
 
-    const mouseRadius = 0.1; // Adjust this value as needed
-const mouseStrength = 0.05; // Adjust this value as needed, if not defined elsewhere
+    const mouseRadius = 3; // Adjust this value as needed
+const mouseStrength = 5; // Adjust this value as needed, if not defined elsewhere
 
 
     // Set up the scene, camera, and renderer
@@ -37,31 +37,30 @@ const mouseStrength = 0.05; // Adjust this value as needed, if not defined elsew
 
     // Define the textureLoader here
 const textureLoader = new THREE.TextureLoader();
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2();
 
-    let mouse = new THREE.Vector2(10000, 10000);
-    let raycaster = new THREE.Raycaster();
+window.addEventListener('mousemove', (e) => {
+    // Update the mouse position
+    mouse.x = (e.clientX / window.innerWidth) * imgWidth - imgWidth / 2;
+    mouse.y = -(e.clientY / window.innerHeight) * imgHeight + imgHeight / 2;
 
-    const cameraParallaxFactor = 0.5;
+    // Update the raycaster with the mouse position
+    raycaster.setFromCamera(mouse, camera);
 
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-        mouse.z = getAverageParticleZ();
-    
-        raycaster.setFromCamera(mouse, camera);
-    
-        if (!raycaster.ray) {
-            console.error('Raycaster ray is not initialized.');
-            return; // Exit the function early to prevent further errors
-        }
-    
-        let intersectPoint = new THREE.Vector3();
-        raycaster.ray.at(1.3, intersectPoint);
-    
-        camera.position.x += (intersectPoint.x * cameraParallaxFactor - camera.position.x) * 0.05;
-        camera.position.y += (-intersectPoint.y * cameraParallaxFactor - camera.position.y) * 0.05;
-        camera.lookAt(scene.position);
-    });
+    // Find all particles that intersect with the mouse's ray
+    let intersects = raycaster.intersectObjects(particles);
+
+    // If there's at least one intersection, the first one is the closest
+    if (intersects.length > 0) {
+        let intersect = intersects[0];
+
+        // The intersection point is the position where the mouse's ray hits the particle
+        let intersectPoint = intersect.point;
+
+        // You can now use intersectPoint to interact with the particles
+    }
+});
     // Define particlesGeometry in the outer scope
 let particlesGeometry;
 
