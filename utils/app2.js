@@ -235,15 +235,24 @@ const fireVertices = [];
 const fireColors = [];
 const fireSizes = [];
 
-for (let i = 0; i < 5000; i++) {  // Increase the number of particles for density
+for (let i = 0; i < 5000; i++) {
     const x = (Math.random() - 0.5) * 2;
     const y = Math.random() - 2;
     const z = (Math.random() - 0.5) * 2;
     fireVertices.push(x, y, z);
 
-    const hue = 10 + Math.random() * 10;
-    const saturation = 80 + Math.random() * 20;
-    const lightness = 40 + Math.random() * 2;
+    let hue, saturation, lightness;
+    // 10% of the time, generate a fire red color
+    if (Math.random() < 0.1) {
+        hue = 0; // Red hue
+        saturation = 90 + Math.random() * 10; // High saturation
+        lightness = 50 + Math.random() * 10; // Middle range lightness
+    } else {
+        hue = Math.random() * 360; // Any hue for grey
+        saturation = Math.random() * 10; // Low saturation for grey
+        lightness = 45 + Math.random() * 10; // Middle range lightness for grey
+    }
+
     const color = new THREE.Color(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
     fireColors.push(color.r, color.g, color.b);
 }
